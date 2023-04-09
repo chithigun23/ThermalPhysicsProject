@@ -1,0 +1,58 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib.animation import FuncAnimation
+
+# Constants
+num_points = 5
+k = 1.380649e-23  # Boltzmann constant
+T = 300  # Temperature in Kelvin
+m = 1e-26  # Mass of a gas particle in kg
+dt = 1e-14  # Time step in seconds
+
+# Generate random initial velocities from Maxwell-Boltzmann distribution
+velocities = np.sqrt(k * T / m) * np.random.randn(num_points, 3)
+
+# Generate random initial positions within a unit cube
+np.random.seed()
+points = np.random.rand(num_points, 3)
+
+# Create a 3D figure
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+
+# Update function for animation
+def update(step):
+    global points, velocities, ax
+    # Update positions
+    points += velocities * dt
+    
+    # Check for collisions with walls and apply elastic collisions
+    for i in range(3):
+        # Check for collisions with lower wall
+        mask = points[:, i] < 0
+        points[mask, i] = -points[mask, i]
+        velocities[mask, i] = -velocities[mask, i]
+        
+        # Check for collisions with upper wall
+        mask = points[:, i] > 1
+        points[mask, i] = 2 - points[mask, i]
+        velocities[mask, i] = -velocities[mask, i]
+    
+    # Update plot
+    ax.clear()
+    ax.scatter(points[:, 0], points[:, 1], points[:, 2], c='r', marker='o', label='Random Points')
+    ax.set_xlim([-1, 2])
+    ax.set_ylim([-1, 2])
+    ax.set_zlim([-1, 2])
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+    ax.set_zlabel('Z')
+    ax.set_title(f'Random Points in a Unit Cube (Step {step+1}/{num_steps})')
+
+# Create animation
+num_steps = 100  # Number of time steps
+ani = FuncAnimation(fig, update, frames=num_steps, interval=20, repeat=False)
+
+# Display animation
+plt.show()
