@@ -77,10 +77,13 @@ class Particle:
         return self.velocity / np.linalg.norm(self.velocity) * np.sqrt(self.solvel_mag[-1])
 
 
-
 def solve_step(particle_list, step, size):
     """Solve a step for every particle."""
 
-    # Detect edge-hitting and collision of every particle
+ # Detect edge-hitting and collision of every particle
     for i in range(len(particle_list)):
         particle_list[i].compute_refl(step,size)
+        
+        for j in range(i+1, len(particle_list)):
+            if particle_list[i].check_coll(particle_list[j]):
+                particle_list[i].compute_coll(particle_list[j],step)

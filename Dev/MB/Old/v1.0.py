@@ -8,7 +8,7 @@ T = 300            # Temperature of gas
 n = 1000           # Number of gas particles
 
 v = np.sqrt((k*T)/m)*np.random.randn(n)
-
+This 
 fig, ax = plt.subplots()
 ax.hist(v, bins=50, density=True, alpha=0.5, range=[0, 1000])
 

@@ -1,9 +1,9 @@
 import tkinter as tk
 import math as m
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.patches as patches
+from matplotlib.figure import Figure
 
 def convert_to_float(s):
     if 'e' in s:
@@ -33,7 +33,8 @@ def create_graph():
         window.graph_canvas.get_tk_widget().pack_forget()
         window.graph_canvas.get_tk_widget().destroy()
 
-    fig, ax = plt.subplots(figsize=(5, 4), dpi=100)
+    fig = Figure(figsize=(5, 4), dpi=100)
+    ax = fig.add_subplot(111)
     dipoles = np.arange(N)
     down_arrows = np.random.choice(dipoles, N - n, replace=False)
 
@@ -49,11 +50,11 @@ def create_graph():
 #Get rid of the x and y axis ticks as its not really meaningful
     ax.set_xticks([])
     ax.set_yticks([])
-    plt.ylabel('Upwards Facing Field')
+    ax.set_ylabel('Upwards Facing Field')
 #The xlim values scale to the number of arrows (N values). This prevents over clutter 
 #and keeps the arrows within the graph
-    plt.xlim(0, N + 1)
-    plt.ylim(-2, 2)
+    ax.set_xlim(0, N + 1)
+    ax.set_ylim(-2, 2)
 
     # Create a canvas to display the graph
     canvas = FigureCanvasTkAgg(fig, master=window)
@@ -69,16 +70,16 @@ def create_graph():
 #This is the code for the 'application' element of the simulation. 
 #ie. the text input, buttons and resultant values.
 window = tk.Tk()
-window.title("Calculate S")
+window.title("Paramagnet Calculator")
 
 #text entry for N values 
-N_label = tk.Label(window, text="Enter the value of N:")
+N_label = tk.Label(window, text="Number of Total Dipoles (N):")
 N_label.pack()
 N_entry = tk.Entry(window)
 N_entry.pack()
 
 #text entry for n values 
-n_label = tk.Label(window, text="Enter the value of n:")
+n_label = tk.Label(window, text="Number of dipoles aligned (n):")
 n_label.pack()
 n_entry = tk.Entry(window)
 n_entry.pack()
