@@ -76,7 +76,7 @@ window = tk.Tk()
 window.title("Ferromagnetism Simulation")
 
 # Create the Figure and Axes for the plot
-fig = Figure(figsize=(8, 8), dpi=100)
+fig = Figure(figsize=(5, 5), dpi=100)
 ax = fig.add_subplot(111)
 
 # Define the size of the grid
