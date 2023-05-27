@@ -3,6 +3,9 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import tkinter as tk
+import os
+import sys
+import subprocess
 
 class Application(tk.Frame):
     SPEED_RED = 0.9
@@ -128,6 +131,17 @@ class Application(tk.Frame):
 # Create a root window
 root = tk.Tk()
 app = Application(master=root)
+
+def back_to_menu():
+    # This will destroy the current window
+    root.destroy()
+    # This will run the menu script
+    menu_script_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'MENU', 'menu.py')
+    subprocess.Popen([sys.executable, menu_script_path])
+
+# Create a Back button
+back_button = tk.Button(root, text="Back", command=back_to_menu)
+back_button.pack()
 
 # Start the application
 app.mainloop()

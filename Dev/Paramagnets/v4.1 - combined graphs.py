@@ -5,6 +5,9 @@ import numpy as np
 import matplotlib.patches as patches
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
+import os
+import subprocess
+import sys
 
 def convert_to_float(s):
     if 'e' in s:
@@ -119,5 +122,13 @@ output_label.pack()
 
 error_label = tk.Label(window, text="", fg="red")  # label for error messages
 error_label.pack()
+
+def back_to_menu():
+    window.destroy()
+    menu_script_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'MENU', 'menu.py')
+    subprocess.Popen([sys.executable, menu_script_path])
+
+back_button = tk.Button(window, text="Back", command=back_to_menu)
+back_button.pack()
 
 window.mainloop()

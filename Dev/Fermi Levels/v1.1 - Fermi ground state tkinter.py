@@ -1,7 +1,10 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import subprocess
 from tkinter import *
+import os
+import sys
 
 def plot_large_dots(n,d, frame):
     # Clear previous figures
@@ -64,5 +67,16 @@ calculate_button.pack()
 # Create a frame for the plot
 plot_frame = Frame(root)
 plot_frame.pack()
+
+def back_to_menu():
+    # This will destroy the current window
+    root.destroy()
+    # This will run the menu script
+    menu_script_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'MENU', 'menu.py')
+    subprocess.Popen([sys.executable, menu_script_path])
+
+# Create a Back button
+back_button = Button(root, text="Back", command=back_to_menu)
+back_button.pack()
 
 root.mainloop()
