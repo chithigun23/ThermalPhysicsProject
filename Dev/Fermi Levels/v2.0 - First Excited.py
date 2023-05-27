@@ -6,7 +6,7 @@ from tkinter import *
 import os
 import sys
 
-def plot_large_dots(n,d, frame):
+def plot_large_dots(n, d, frame):
     # Clear previous figures
     for widget in frame.winfo_children():
         widget.destroy()
@@ -14,41 +14,69 @@ def plot_large_dots(n,d, frame):
     fig, ax = plt.subplots()
 
     # Generate the y-coordinates for the large dots
-    y_coords = np.arange(0, n*d,d)
+    y_coords = np.arange(0, n * d - d, d)
+    white_coords = (n * d - d)
+    top_coord = (n * d)
+
+    print(white_coords)
+    print(top_coord)
 
     # Plot the large dots as scatter points
     ax.scatter(np.zeros_like(y_coords), y_coords, s=100, color='black')
+    ax.scatter(np.zeros_like(white_coords), white_coords, s=100, marker='o', facecolor='none', edgecolors='black')
+    ax.scatter(np.zeros_like(top_coord), top_coord, s=100, color='black')
 
     # Hide the x-axis ticks and show relevant yaxis ticks
     ax.set_xticks([])
-    ax.set_yticks(np.arange(0,n*d,d))
+    ax.set_yticks(np.arange(0, n * d + d, d))
 
     # Set the y-axis limits
-    ax.set_ylim(-1, n*d + 1)
+    ax.set_ylim(-1, n * d + 1)
 
     # Set labels and title
     ax.set_xlabel('')
     ax.set_ylabel('Energy Levels')
-    ax.set_title('Ground-state Fermi energy')
+    ax.set_title('First-Excited-State Fermi Energy')
 
     # Calculate the energy sum
-    energy_sum = np.sum(y_coords)
+    energy_sum = np.sum(y_coords) + top_coord
 
     # Add text onto the plot
-    ax.text(0.037, n*d-(d/2), '\u2211E=' + str(energy_sum), fontsize=12, color='red',  bbox=dict(facecolor='black', alpha=0.15))
+    ax.text(0.03, n * d - (d / 2), '\u2211E={:.4g}'.format(energy_sum), fontsize=12, color='red',
+    bbox=dict(facecolor='black', alpha=0.1))
+
 
     # Show plot
     canvas = FigureCanvasTkAgg(fig, master=frame)
     canvas.draw()
     canvas.get_tk_widget().pack()
 
+
 def calculate():
-    num_large_dots = int(num_large_dots_entry.get())
-    diff = float(diff_entry.get())
+    num_large_dots = num_large_dots_entry.get()
+    diff = diff_entry.get()
+
+    try:
+        num_large_dots = int(num_large_dots)
+        if num_large_dots <= 0:
+            raise ValueError("Number of particles must be a positive integer.")
+    except ValueError as e:
+        error_label.config(text=str(e))
+        return
+
+    try:
+        diff = float(diff)
+    except ValueError as e:
+        error_label.config(text="Energy level difference must be a valid number.")
+        return
+
+    error_label.config(text="")  # Clear any previous error messages
+
     plot_large_dots(num_large_dots, diff, plot_frame)
 
+
 root = Tk()
-root.title("Fermi Ground-State Energy Calculation")
+root.title("Fermi First-Excited-State Energy Calculation")
 
 # Create labels and entries for user input
 num_large_dots_label = Label(root, text="Number of Particles")
@@ -60,6 +88,9 @@ diff_label = Label(root, text="Energy Level Difference")
 diff_label.pack()
 diff_entry = Entry(root)
 diff_entry.pack()
+
+error_label = Label(root, fg="red")
+error_label.pack()
 
 calculate_button = Button(root, text="Calculate", command=calculate)
 calculate_button.pack()

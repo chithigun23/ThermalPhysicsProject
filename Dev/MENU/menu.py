@@ -7,15 +7,16 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Paths to your applications
 apps = {
-    "Fermi Levels": os.path.join(script_dir, "..", "Fermi Levels", "v1.1 - Fermi ground state tkinter.py"),
-    "Gas Mixing": os.path.join(script_dir, "..", "Gas Mixing", "v1.2.py"),
+    "GND Fermions": os.path.join(script_dir, "..", "Fermi Levels", "v1.1 - Fermi ground state tkinter.py"),
+    "1st Fermions": os.path.join(script_dir, "..", "Fermi Levels", "v2.0 - First Excited.py"),
     "Ferromagnets": os.path.join(script_dir, "..", "Ferromagnets", "v1.2 - Tkinter.py"),
     "Paramagnets": os.path.join(script_dir, "..", "Paramagnets", "v4.1 - combined graphs.py"),
-    # Add additional applications here
+    "Gas Mixing": os.path.join(script_dir, "..", "Gas Mixing", "v1.2.py"),
+    # Add additional applications here, following the format
 }
 
 def run_app(path):
-    """Run an application, then destroy the root window to close the menu"""
+#Run an application, then destroy the root window to close the menu
     root.destroy()
     subprocess.Popen(["python", path]) 
 
